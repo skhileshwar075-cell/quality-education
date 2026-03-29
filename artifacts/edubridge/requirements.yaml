@@ -1,0 +1,17 @@
+packages:
+  "framer-motion": "For premium page transitions, micro-interactions, and layout animations"
+  "lucide-react": "For crisp, modern icons across the UI"
+  "clsx": "For conditional tailwind class merging"
+  "tailwind-merge": "For safely merging tailwind classes in UI components"
+
+images:
+  - path: "artifacts/edubridge/public/images/hero-bg.png"
+    description: "Abstract elegant geometric waves and soft gradients in academic deep blue and crisp white, conveying a clean, minimal, and professional education platform feel"
+    aspect_ratio: "16:9"
+  - path: "artifacts/edubridge/public/images/logo-icon.png"
+    description: "Minimalist abstract logo mark combining a bridge and an open book in deep academic blue, on a transparent background, modern tech education style"
+    aspect_ratio: "1:1"
+
+notes:
+  - Global fetch interceptor added to inject JWT token into all API requests made by the generated TanStack Query hooks.
+  - Using a custom AuthContext to manage local token state and role-based routing.

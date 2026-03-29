@@ -1,22 +1,32 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: EduBridge API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication operations
+  - name: subjects
+    description: Subject management
+  - name: content
+    description: Content management
+  - name: quiz
+    description: Quiz management
+  - name: results
+    description: Results and progress
+  - name: admin
+    description: Admin operations
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,7 +34,483 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /subjects:
+    get:
+      operationId: getSubjects
+      tags: [subjects]
+      summary: Get all subjects
+      responses:
+        "200":
+          description: List of subjects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Subject"
+
+  /subjects/{id}:
+    get:
+      operationId: getSubject
+      tags: [subjects]
+      summary: Get a subject by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Subject
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subject"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /content/{subjectId}:
+    get:
+      operationId: getContent
+      tags: [content]
+      summary: Get content for a subject
+      parameters:
+        - name: subjectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Content list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Content"
+
+  /quiz/{subjectId}:
+    get:
+      operationId: getQuiz
+      tags: [quiz]
+      summary: Get quiz for a subject
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: subjectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Quiz
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quiz"
+        "404":
+          description: No quiz found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /quiz/submit:
+    post:
+      operationId: submitQuiz
+      tags: [quiz]
+      summary: Submit quiz answers
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuizSubmitRequest"
+      responses:
+        "200":
+          description: Quiz result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Result"
+
+  /results/my:
+    get:
+      operationId: getMyResults
+      tags: [results]
+      summary: Get my quiz results
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: My results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ResultWithSubject"
+
+  /progress/complete:
+    post:
+      operationId: markLessonComplete
+      tags: [results]
+      summary: Mark a lesson as complete
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarkCompleteRequest"
+      responses:
+        "200":
+          description: Progress updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgressResponse"
+
+  /progress/my:
+    get:
+      operationId: getMyProgress
+      tags: [results]
+      summary: Get my completed lessons
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: My progress
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /admin/subjects:
+    post:
+      operationId: createSubject
+      tags: [admin]
+      summary: Create a subject (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSubjectRequest"
+      responses:
+        "201":
+          description: Subject created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subject"
+
+  /admin/subjects/{id}:
+    put:
+      operationId: updateSubject
+      tags: [admin]
+      summary: Update a subject (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSubjectRequest"
+      responses:
+        "200":
+          description: Subject updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subject"
+    delete:
+      operationId: deleteSubject
+      tags: [admin]
+      summary: Delete a subject (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Subject deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /admin/content:
+    post:
+      operationId: createContent
+      tags: [admin]
+      summary: Create content (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateContentRequest"
+      responses:
+        "201":
+          description: Content created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Content"
+
+  /admin/content/{id}:
+    put:
+      operationId: updateContent
+      tags: [admin]
+      summary: Update content (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateContentRequest"
+      responses:
+        "200":
+          description: Content updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Content"
+    delete:
+      operationId: deleteContent
+      tags: [admin]
+      summary: Delete content (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Content deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /admin/quiz:
+    post:
+      operationId: createQuiz
+      tags: [admin]
+      summary: Create a quiz (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizRequest"
+      responses:
+        "201":
+          description: Quiz created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quiz"
+
+  /admin/quiz/{id}:
+    put:
+      operationId: updateQuiz
+      tags: [admin]
+      summary: Update a quiz (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizRequest"
+      responses:
+        "200":
+          description: Quiz updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quiz"
+    delete:
+      operationId: deleteQuiz
+      tags: [admin]
+      summary: Delete a quiz (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Quiz deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /admin/users:
+    get:
+      operationId: getUsers
+      tags: [admin]
+      summary: Get all users (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Users list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserResponse"
+
+  /admin/results:
+    get:
+      operationId: getAllResults
+      tags: [admin]
+      summary: Get all quiz results (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: All results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ResultWithSubject"
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     HealthStatus:
       type: object
@@ -34,3 +520,262 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    RegisterRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - name
+        - email
+        - password
+
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/UserResponse"
+      required:
+        - token
+        - user
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+      required:
+        - id
+        - name
+        - email
+        - role
+
+    Subject:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+      required:
+        - id
+        - title
+        - description
+
+    CreateSubjectRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+      required:
+        - title
+        - description
+
+    Content:
+      type: object
+      properties:
+        id:
+          type: string
+        subjectId:
+          type: string
+        title:
+          type: string
+        notes:
+          type: string
+        videoUrl:
+          type: string
+      required:
+        - id
+        - subjectId
+        - title
+        - notes
+
+    CreateContentRequest:
+      type: object
+      properties:
+        subjectId:
+          type: string
+        title:
+          type: string
+        notes:
+          type: string
+        videoUrl:
+          type: string
+      required:
+        - subjectId
+        - title
+        - notes
+
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+        question:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        correctAnswer:
+          type: integer
+      required:
+        - id
+        - question
+        - options
+        - correctAnswer
+
+    Quiz:
+      type: object
+      properties:
+        id:
+          type: string
+        subjectId:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Question"
+      required:
+        - id
+        - subjectId
+        - questions
+
+    CreateQuizRequest:
+      type: object
+      properties:
+        subjectId:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Question"
+      required:
+        - subjectId
+        - questions
+
+    QuizSubmitRequest:
+      type: object
+      properties:
+        subjectId:
+          type: string
+        answers:
+          type: array
+          items:
+            type: integer
+      required:
+        - subjectId
+        - answers
+
+    Result:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        subjectId:
+          type: string
+        score:
+          type: integer
+        total:
+          type: integer
+        percentage:
+          type: number
+      required:
+        - id
+        - userId
+        - subjectId
+        - score
+        - total
+        - percentage
+
+    ResultWithSubject:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        subjectId:
+          type: string
+        subjectTitle:
+          type: string
+        score:
+          type: integer
+        total:
+          type: integer
+        percentage:
+          type: number
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - subjectId
+        - subjectTitle
+        - score
+        - total
+        - percentage
+        - createdAt
+
+    MarkCompleteRequest:
+      type: object
+      properties:
+        contentId:
+          type: string
+      required:
+        - contentId
+
+    ProgressResponse:
+      type: object
+      properties:
+        completedLessons:
+          type: array
+          items:
+            type: string
+      required:
+        - completedLessons
