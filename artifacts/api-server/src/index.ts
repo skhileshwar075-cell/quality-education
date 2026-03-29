@@ -1,6 +1,8 @@
+import { createServer } from "http";
 import app from "./app.js";
 import { logger } from "./lib/logger.js";
 import { connectDB } from "./config/db.js";
+import { initSocket } from "./lib/socket.js";
 
 const rawPort = process.env["PORT"];
 
@@ -15,7 +17,10 @@ if (Number.isNaN(port) || port <= 0) {
 }
 
 connectDB().then(() => {
-  app.listen(port, (err) => {
+  const httpServer = createServer(app);
+  initSocket(httpServer);
+
+  httpServer.listen(port, (err?: Error) => {
     if (err) {
       logger.error({ err }, "Error listening on port");
       process.exit(1);

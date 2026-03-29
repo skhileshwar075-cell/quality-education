@@ -15,6 +15,9 @@ import SubjectPage from "@/pages/subject";
 import QuizPage from "@/pages/quiz";
 import ProgressPage from "@/pages/progress";
 import AdminPage from "@/pages/admin";
+import AnalyticsPage from "@/pages/analytics";
+import QuizUploadPage from "@/pages/quiz-upload";
+import GenerateQuizPage from "@/pages/generate-quiz";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient({
@@ -44,10 +47,10 @@ function Router() {
         <UserRoute><DashboardPage /></UserRoute>
       </Route>
       <Route path="/subject/:id">
-        {(params) => <UserRoute><SubjectPage /></UserRoute>}
+        {() => <UserRoute><SubjectPage /></UserRoute>}
       </Route>
       <Route path="/quiz/:subjectId">
-        {(params) => <UserRoute><QuizPage /></UserRoute>}
+        {() => <UserRoute><QuizPage /></UserRoute>}
       </Route>
       <Route path="/progress">
         <UserRoute><ProgressPage /></UserRoute>
@@ -56,6 +59,15 @@ function Router() {
       {/* Admin-protected routes */}
       <Route path="/admin/dashboard">
         <AdminRoute><AdminPage /></AdminRoute>
+      </Route>
+      <Route path="/admin/analytics">
+        <AdminRoute><AnalyticsPage /></AdminRoute>
+      </Route>
+      <Route path="/admin/quiz-upload">
+        <AdminRoute><QuizUploadPage /></AdminRoute>
+      </Route>
+      <Route path="/admin/generate-quiz">
+        <AdminRoute><GenerateQuizPage /></AdminRoute>
       </Route>
 
       {/* Catch-all */}

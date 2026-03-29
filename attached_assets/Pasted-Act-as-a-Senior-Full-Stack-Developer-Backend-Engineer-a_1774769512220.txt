@@ -1,0 +1,217 @@
+Act as a Senior Full Stack Developer, Backend Engineer, and System Architect.
+
+Enhance the existing project:
+
+"EduBridge – Free Smart Learning Platform"
+
+by implementing ADVANCED FEATURES.
+
+⚠️ STRICT RULE:
+You MUST use ONLY the following tech stack:
+
+Frontend:
+
+- React.js (functional components + hooks ONLY)
+- Tailwind CSS ONLY
+
+Backend:
+
+- Node.js + Express.js ONLY
+
+Database:
+
+- MongoDB with Mongoose ONLY
+
+Authentication:
+
+- JWT ONLY
+
+🚫 DO NOT USE:
+
+- No Next.js, Firebase, Supabase
+- No external UI libraries
+- No SQL databases
+- No TypeScript
+- No GraphQL
+
+---
+
+🎯 FEATURES TO IMPLEMENT
+
+1. 📊 ANALYTICS DASHBOARD (ADMIN)
+
+Frontend:
+
+- Page: /admin/analytics
+- Create charts using:
+  - Chart.js OR Recharts (allowed visualization library)
+
+Charts required:
+
+- Total Users Growth (line chart)
+- Quiz Attempts per Subject (bar chart)
+- Average Scores (pie chart)
+
+Backend APIs:
+
+- GET /api/admin/analytics/users
+- GET /api/admin/analytics/quizzes
+- GET /api/admin/analytics/scores
+
+Data:
+
+- Aggregate using MongoDB queries
+
+---
+
+📂 2. BULK UPLOAD (CSV FOR QUIZ QUESTIONS)
+
+Frontend:
+
+- Page: /admin/quiz-upload
+- Upload CSV file input
+- Show preview before upload
+
+CSV format:
+question,option1,option2,option3,option4,correctAnswer,subjectId
+
+Backend:
+
+- Use multer for file upload
+- Parse CSV using csv-parser
+
+API:
+
+- POST /api/admin/quiz/bulk-upload
+
+Functionality:
+
+- Validate rows
+- Insert multiple questions into MongoDB
+- Handle errors (invalid format)
+
+---
+
+🤖 3. AI-GENERATED QUIZZES
+
+Objective:
+Generate quiz questions automatically based on subject/topic
+
+Backend:
+
+- Create endpoint:
+  POST /api/admin/quiz/generate
+
+Input:
+
+- subject
+- topic
+- numberOfQuestions
+
+Logic:
+
+- Generate questions dynamically using a function (mock AI if no API available)
+- OR integrate OpenAI API (if allowed)
+
+Output:
+
+- Return structured MCQs:
+  question
+  options[]
+  correctAnswer
+
+Frontend:
+
+- Form to enter topic + number of questions
+- Button: "Generate Quiz"
+- Preview generated quiz
+- Option to save to database
+
+---
+
+🔔 4. REAL-TIME NOTIFICATIONS
+
+Use:
+
+- Socket.io (ONLY for real-time communication)
+
+Backend:
+
+- Setup Socket.io server
+- Emit events:
+  - New quiz added
+  - New content uploaded
+  - Quiz results published
+
+Frontend:
+
+- Connect using socket.io-client
+- Show notifications in UI (toast or alert)
+
+Example:
+
+- "New quiz added in Mathematics"
+- "Your quiz result is available"
+
+---
+
+📁 BACKEND STRUCTURE ADDITIONS
+
+/server/
+
+- routes/analyticsRoutes.js
+- controllers/analyticsController.js
+- routes/uploadRoutes.js
+- controllers/uploadController.js
+- routes/aiQuizRoutes.js
+- controllers/aiQuizController.js
+- socket/socket.js
+
+---
+
+📁 FRONTEND STRUCTURE ADDITIONS
+
+/client/src/pages/admin/
+
+- Analytics.jsx
+- QuizUpload.jsx
+- GenerateQuiz.jsx
+
+/client/src/components/
+
+- Charts.jsx
+- FileUpload.jsx
+- Notification.jsx
+
+---
+
+🔐 SECURITY
+
+- Protect ALL admin routes
+- Validate file uploads
+- Limit file size
+- Sanitize inputs
+
+---
+
+⚙️ OUTPUT REQUIREMENTS
+
+1. Full backend code (routes, controllers, socket setup)
+2. Full frontend code (pages + components)
+3. CSV sample file
+4. Setup instructions
+5. How to test each feature
+
+---
+
+⚠️ FINAL INSTRUCTION
+
+- Generate COMPLETE WORKING IMPLEMENTATION
+- Ensure all features are integrated with existing system
+- Ensure strict tech stack compliance
+
+If anything is missing → REGENERATE
+
+---
+
+Start building advanced features now.
