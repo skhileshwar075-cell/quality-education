@@ -5,12 +5,12 @@ const Tabs = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { defaultValue?: string }
 >(({ className, defaultValue, ...props }, ref) => {
-  const [value, setValue] = React.useState(defaultValue)
+  const [currentValue, setCurrentValue] = React.useState(defaultValue)
   return (
-    <div ref={ref} className={cn("w-full", className)} data-state={value} {...props}>
+    <div ref={ref} className={cn("w-full", className)} {...props}>
       {React.Children.map(props.children, child => {
         if (React.isValidElement(child)) {
-          return React.cloneElement(child as React.ReactElement<any>, { value, setValue })
+          return React.cloneElement(child as React.ReactElement<any>, { currentValue, setCurrentValue })
         }
         return child
       })}
@@ -21,8 +21,8 @@ Tabs.displayName = "Tabs"
 
 const TabsList = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { value?: string, setValue?: (v: string) => void }
->(({ className, value, setValue, ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement> & { currentValue?: string; setCurrentValue?: (v: string) => void }
+>(({ className, currentValue, setCurrentValue, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
@@ -33,7 +33,7 @@ const TabsList = React.forwardRef<
   >
     {React.Children.map(props.children, child => {
       if (React.isValidElement(child)) {
-        return React.cloneElement(child as React.ReactElement<any>, { currentValue: value, setValue })
+        return React.cloneElement(child as React.ReactElement<any>, { currentValue, setCurrentValue })
       }
       return child
     })}
@@ -43,15 +43,19 @@ TabsList.displayName = "TabsList"
 
 const TabsTrigger = React.forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement> & { value: string; currentValue?: string; setValue?: (v: string) => void }
->(({ className, value, currentValue, setValue, ...props }, ref) => {
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    value: string;
+    currentValue?: string;
+    setCurrentValue?: (v: string) => void;
+  }
+>(({ className, value, currentValue, setCurrentValue, ...props }, ref) => {
   const isSelected = value === currentValue;
   return (
     <button
       ref={ref}
       type="button"
       role="tab"
-      onClick={() => setValue && setValue(value)}
+      onClick={() => setCurrentValue && setCurrentValue(value)}
       className={cn(
         "inline-flex items-center justify-center whitespace-nowrap rounded-lg px-6 py-2 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
         isSelected ? "bg-white text-slate-900 shadow-sm" : "hover:text-slate-900 hover:bg-white/50",
