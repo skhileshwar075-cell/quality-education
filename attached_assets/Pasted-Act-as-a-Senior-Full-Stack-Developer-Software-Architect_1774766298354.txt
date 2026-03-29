@@ -1,0 +1,196 @@
+Act as a Senior Full Stack Developer, Software Architect, and Code Quality Reviewer.
+
+Your task is to DESIGN, BUILD, and VALIDATE a COMPLETE production-ready full-stack web application:
+
+Project Name: "EduBridge – Free Smart Learning Platform"
+
+This project MUST strictly follow the required academic technology stack.
+
+---
+
+🚨 CRITICAL RULE (NON-NEGOTIABLE)
+
+You MUST use ONLY the following technologies:
+
+Frontend:
+
+- React.js (JavaScript ONLY — NO TypeScript)
+- Functional Components ONLY
+- React Hooks ONLY (useState, useEffect, useContext, etc.)
+- Tailwind CSS ONLY (NO Bootstrap, NO Material UI, NO shadcn/ui)
+
+Backend:
+
+- Node.js
+- Express.js ONLY
+
+Database:
+
+- MongoDB ONLY
+- Mongoose ONLY
+
+Authentication:
+
+- JWT ONLY
+- bcryptjs for password hashing
+
+---
+
+🚫 STRICTLY PROHIBITED
+
+DO NOT USE under any condition:
+
+- TypeScript (.ts, .tsx, tsconfig)
+- PostgreSQL / MySQL / SQLite
+- Drizzle ORM / Prisma
+- Firebase / Supabase
+- Next.js / Angular / Vue
+- React Query
+- Zod
+- shadcn/ui
+- Framer Motion
+- GraphQL
+- Any external UI frameworks
+
+If any prohibited tech appears → REMOVE and REWRITE.
+
+---
+
+🎯 CORE FEATURES (MANDATORY)
+
+1. Authentication System
+
+- Register/Login
+- JWT-based authentication
+- Role-based (user/admin)
+
+2. User Dashboard
+
+- View subjects
+- Access notes and videos
+- Attempt quizzes
+- Track progress
+
+3. Admin Panel
+
+- Manage subjects
+- Manage content (notes + video links)
+- Manage quizzes (MCQs)
+- View users and results
+
+4. Quiz System
+
+- Multiple choice questions
+- Instant scoring
+- Store results in database
+
+5. Progress Tracking
+
+- Track completed lessons
+- Show quiz scores
+
+---
+
+📁 PROJECT STRUCTURE (MANDATORY)
+
+/client
+/src
+/components
+/pages
+/context
+/services
+
+/server
+/controllers
+/models
+/routes
+/middleware
+/config
+
+---
+
+🗄️ DATABASE MODELS (Mongoose ONLY)
+
+- User (name, email, password, role)
+- Subject (title, description)
+- Content (subjectId, notes, videoUrl)
+- Quiz (subjectId, questions[])
+- Result (userId, subjectId, score)
+
+---
+
+🔌 API DESIGN (REST ONLY)
+
+Auth:
+
+- POST /api/auth/register
+- POST /api/auth/login
+
+Subjects:
+
+- GET /api/subjects
+- POST /api/admin/subjects
+
+Content:
+
+- GET /api/content/:subjectId
+- POST /api/admin/content
+
+Quiz:
+
+- GET /api/quiz/:subjectId
+- POST /api/quiz/submit
+
+---
+
+🔐 SECURITY
+
+- JWT middleware for protected routes
+- Admin middleware for admin routes
+- Password hashing with bcryptjs
+- Input validation (manual or simple middleware)
+
+---
+
+🎨 UI RULES (STRICT)
+
+- Tailwind CSS ONLY
+- Responsive design (mobile + desktop)
+- Clean dashboard layout
+- No external UI libraries
+
+---
+
+🔁 VALIDATION STEP (VERY IMPORTANT)
+
+Before final output, VERIFY:
+
+✅ No TypeScript files exist
+✅ No forbidden libraries used
+✅ MongoDB + Mongoose used
+✅ JWT authentication working
+✅ Admin & user routing correct
+
+If any violation found → FIX before output
+
+---
+
+📦 OUTPUT FORMAT
+
+1. Folder structure
+2. Backend code (ALL files)
+3. Frontend code (ALL files)
+4. Setup instructions
+5. Admin account setup (email/password)
+6. README.md
+
+---
+
+⚠️ FINAL INSTRUCTION
+
+- Do NOT skip any feature
+- Do NOT give partial code
+- Do NOT suggest alternative stacks
+- Ensure FULL compliance with required technologies
+
+Start building the COMPLETE project now.
