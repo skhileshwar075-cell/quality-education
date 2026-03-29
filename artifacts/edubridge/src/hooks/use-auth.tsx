@@ -41,10 +41,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
+    const wasAdmin = user?.role === "admin";
     localStorage.removeItem("edubridge_token");
     setToken(null);
     setUser(null);
-    window.location.href = "/login";
+    window.location.href = wasAdmin ? "/admin/login" : "/login";
   };
 
   const isLoading = token ? isMeLoading : false;

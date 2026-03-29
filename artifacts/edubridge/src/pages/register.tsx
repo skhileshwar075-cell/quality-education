@@ -18,7 +18,7 @@ export default function RegisterPage() {
     mutation: {
       onSuccess: (data) => {
         login(data.token, data.user);
-        setLocation("/");
+        setLocation("/dashboard");
       },
       onError: (err: any) => {
         setError(err?.message || "Registration failed");

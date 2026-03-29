@@ -1,12 +1,14 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/use-auth";
-import "@/lib/fetch-interceptor"; // Import the fetch interceptor first
+import { AdminRoute, UserRoute } from "@/components/protected-route";
+import "@/lib/fetch-interceptor";
 
 // Pages
 import LoginPage from "@/pages/login";
+import AdminLoginPage from "@/pages/admin-login";
 import RegisterPage from "@/pages/register";
 import DashboardPage from "@/pages/dashboard";
 import SubjectPage from "@/pages/subject";
@@ -27,18 +29,36 @@ const queryClient = new QueryClient({
 function Router() {
   return (
     <Switch>
+      {/* Public routes */}
       <Route path="/login" component={LoginPage} />
+      <Route path="/admin/login" component={AdminLoginPage} />
       <Route path="/register" component={RegisterPage} />
-      
-      {/* Protected Routes inside AuthProvider boundary (enforced in components) */}
-      <Route path="/" component={DashboardPage} />
-      <Route path="/subject/:id" component={SubjectPage} />
-      <Route path="/quiz/:subjectId" component={QuizPage} />
-      <Route path="/progress" component={ProgressPage} />
-      
-      {/* Admin Route */}
-      <Route path="/admin" component={AdminPage} />
 
+      {/* Root redirects to user login */}
+      <Route path="/">
+        <Redirect to="/login" />
+      </Route>
+
+      {/* User-protected routes */}
+      <Route path="/dashboard">
+        <UserRoute><DashboardPage /></UserRoute>
+      </Route>
+      <Route path="/subject/:id">
+        {(params) => <UserRoute><SubjectPage /></UserRoute>}
+      </Route>
+      <Route path="/quiz/:subjectId">
+        {(params) => <UserRoute><QuizPage /></UserRoute>}
+      </Route>
+      <Route path="/progress">
+        <UserRoute><ProgressPage /></UserRoute>
+      </Route>
+
+      {/* Admin-protected routes */}
+      <Route path="/admin/dashboard">
+        <AdminRoute><AdminPage /></AdminRoute>
+      </Route>
+
+      {/* Catch-all */}
       <Route component={NotFound} />
     </Switch>
   );

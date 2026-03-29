@@ -1,0 +1,155 @@
+Act as a Senior Full Stack Developer.
+
+Your task is to fix the authentication and routing issue in the EduBridge project where the admin login is incorrectly redirecting to the normal user portal.
+
+---
+
+⚠️ STRICT TECH STACK (DO NOT CHANGE):
+
+- React.js (JavaScript only, functional components + hooks)
+- Tailwind CSS
+- Node.js + Express.js
+- MongoDB (Mongoose)
+- JWT Authentication
+- No TypeScript
+- No additional frameworks
+
+---
+
+🎯 PROBLEM:
+Currently, when logging in with admin credentials:
+
+Email: admin@edubridge.com
+Password: Admin@123
+
+👉 The system redirects to the normal user dashboard instead of the admin panel.
+
+---
+
+🎯 OBJECTIVE:
+Fix role-based authentication and ensure proper redirection based on user role.
+
+---
+
+🔐 BACKEND FIXES
+
+1. Update User Schema:
+
+- Add a "role" field:
+  - "user" (default)
+  - "admin"
+
+Example:
+{
+email,
+password,
+role: { type: String, enum: ["user", "admin"], default: "user" }
+}
+
+---
+
+2. Ensure Admin Exists:
+
+- Seed admin user on server start if not exists:
+  - email: admin@edubridge.com
+  - password: hashed (bcrypt)
+  - role: "admin"
+
+---
+
+3. Update Login API:
+   Route: POST /api/auth/login
+
+- After verifying credentials:
+  - Include "role" in JWT payload
+
+Example:
+{
+userId,
+email,
+role
+}
+
+---
+
+4. JWT Middleware:
+
+- Decode token and attach user role to request
+
+---
+
+🧭 FRONTEND FIXES
+
+1. After Login Response:
+
+- Store JWT token (localStorage)
+- Extract user role
+
+---
+
+2. Role-Based Redirect:
+
+If role === "admin":
+→ Redirect to: "/admin/dashboard"
+
+If role === "user":
+→ Redirect to: "/dashboard"
+
+---
+
+3. Separate Login Pages (IMPORTANT):
+
+- User Login: "/login"
+- Admin Login: "/admin/login"
+
+👉 Admin login page should:
+
+- Only allow admin users
+- Show error if non-admin tries to login
+
+---
+
+4. Protect Routes:
+
+Create Protected Routes:
+
+- AdminRoute:
+  
+  - Allow only if role === "admin"
+  - Else redirect to "/login"
+
+- UserRoute:
+  
+  - Allow only if role === "user"
+
+---
+
+🧩 UI REQUIREMENTS
+
+- Clean login UI using Tailwind
+- Show error message:
+  - "Access denied: Not an admin" if wrong role
+- Loading state on login button
+
+---
+
+🧪 TEST CASES
+
+✔ Admin login → goes to "/admin/dashboard"
+✔ User login → goes to "/dashboard"
+✔ Admin trying user login page → still works but redirects correctly
+✔ Non-admin trying admin login → blocked
+
+---
+
+🚫 DO NOT:
+
+- Change existing database structure except adding "role"
+- Break existing authentication flow
+- Add new libraries
+
+---
+
+✅ FINAL GOAL:
+
+A secure role-based authentication system where admin and users are properly separated with correct routing and access control.

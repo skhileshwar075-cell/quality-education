@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Layout } from "@/components/layout";
-import { useAuth } from "@/hooks/use-auth";
-import { useLocation } from "wouter";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,14 +9,6 @@ import { Plus, Trash2, Settings, Users, BookOpen, FileText } from "lucide-react"
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function AdminPage() {
-  const { user, isLoading } = useAuth();
-  const [, setLocation] = useLocation();
-  
-  if (!isLoading && user?.role !== "admin") {
-    setLocation("/");
-    return null;
-  }
-
   return (
     <Layout>
       <div className="mb-8">

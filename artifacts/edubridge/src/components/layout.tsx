@@ -9,16 +9,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
 
   const navLinks = [
-    { href: "/", label: "Dashboard", icon: LayoutDashboard, show: !!user },
-    { href: "/progress", label: "Progress", icon: LineChart, show: !!user },
-    { href: "/admin", label: "Admin", icon: Shield, show: user?.role === "admin" },
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, show: !!user && user?.role !== "admin" },
+    { href: "/progress", label: "Progress", icon: LineChart, show: !!user && user?.role !== "admin" },
+    { href: "/admin/dashboard", label: "Admin Panel", icon: Shield, show: user?.role === "admin" },
   ];
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 transition-transform hover:scale-105">
+          <Link href={user?.role === "admin" ? "/admin/dashboard" : user ? "/dashboard" : "/login"} className="flex items-center gap-2 transition-transform hover:scale-105">
             <div className="bg-primary/10 p-2 rounded-xl">
               <BookOpen className="h-6 w-6 text-primary" />
             </div>
