@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Layout } from "@/components/layout";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { useGetSubjects, useCreateSubject, useDeleteSubject, useGetUsers, useGetAllResults, useCreateContent } from "@workspace/api-client-react";
 import { useAdminContent, useAdminQuizzes, updateContent, deleteContent, deleteQuiz } from "@/hooks/use-admin-api";
 import { Link } from "wouter";
-import { Plus, Trash2, Settings, Users, BookOpen, FileText, BarChart2, Upload, Cpu, Edit2, X, CheckCircle, Target, TrendingUp, Brain } from "lucide-react";
+import { Plus, Trash2, Settings, Users, BookOpen, FileText, BarChart2, Upload, Cpu, Edit2, X, CheckCircle, Target, TrendingUp, Brain, Search } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 /* ─── Admin Stat Card ─────────────────────────────────────────────────────────── */
@@ -229,19 +229,33 @@ function AdminContent() {
     refetch();
   };
 
-  const filtered = filterSubject ? content.filter(c => c.subjectId === filterSubject) : content;
+  const [contentSearch, setContentSearch] = useState("");
+  const filtered = useMemo(() => {
+    let list = filterSubject ? content.filter(c => c.subjectId === filterSubject) : content;
+    if (contentSearch.trim()) {
+      const q = contentSearch.toLowerCase();
+      list = list.filter(c => c.title?.toLowerCase().includes(q) || c.notes?.toLowerCase().includes(q));
+    }
+    return list;
+  }, [content, filterSubject, contentSearch]);
 
   return (
     <div>
-      <div className="flex flex-wrap justify-between items-center mb-6 gap-3">
+      <div className="flex flex-wrap justify-between items-center mb-4 gap-3">
         <h2 className="text-xl font-bold flex items-center gap-2"><FileText className="h-5 w-5"/> Study Content</h2>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center flex-wrap">
           <select value={filterSubject} onChange={e => setFilterSubject(e.target.value)} className="h-10 rounded-xl border border-input bg-white px-3 py-2 text-sm">
             <option value="">All Subjects</option>
             {subjects?.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}
           </select>
           <Button onClick={openCreate} className="gap-2"><Plus className="h-4 w-4"/> Add Content</Button>
         </div>
+      </div>
+      <div className="relative mb-4">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none"/>
+        <input type="text" value={contentSearch} onChange={e => setContentSearch(e.target.value)}
+          placeholder="Search content by title or notes…"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"/>
       </div>
 
       {loading ? (
@@ -507,10 +521,36 @@ function AdminQuiz() {
 /* ─── USERS ─────────────────────────────────────────────────────────────────── */
 function AdminUsers() {
   const { data: users } = useGetUsers();
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("");
+
+  const filtered = useMemo(() => {
+    let list = users || [];
+    if (roleFilter) list = list.filter(u => u.role === roleFilter);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      list = list.filter(u => u.name?.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q));
+    }
+    return list;
+  }, [users, search, roleFilter]);
+
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-wrap justify-between items-center mb-4 gap-3">
         <h2 className="text-xl font-bold flex items-center gap-2"><Users className="h-5 w-5"/> Registered Users</h2>
+        <div className="flex gap-2">
+          <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="h-10 rounded-xl border border-input bg-white px-3 py-2 text-sm">
+            <option value="">All Roles</option>
+            <option value="student">Student</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+      <div className="relative mb-4">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none"/>
+        <input type="text" value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Search by name or email…"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"/>
       </div>
       <div className="bg-white rounded-xl border overflow-hidden">
         <table className="w-full text-left">
@@ -522,7 +562,7 @@ function AdminUsers() {
             </tr>
           </thead>
           <tbody className="divide-y">
-            {users?.map(u => (
+            {filtered.map(u => (
               <tr key={u.id} className="hover:bg-slate-50/50">
                 <td className="px-6 py-4 font-medium text-slate-900">{u.name}</td>
                 <td className="px-6 py-4 text-slate-500">{u.email}</td>
@@ -531,7 +571,7 @@ function AdminUsers() {
                 </td>
               </tr>
             ))}
-            {!users?.length && <tr><td colSpan={3} className="px-6 py-8 text-center text-slate-500">No users found</td></tr>}
+            {!filtered.length && <tr><td colSpan={3} className="px-6 py-8 text-center text-slate-500">{search || roleFilter ? "No users match your search" : "No users found"}</td></tr>}
           </tbody>
         </table>
       </div>
@@ -542,10 +582,34 @@ function AdminUsers() {
 /* ─── RESULTS ───────────────────────────────────────────────────────────────── */
 function AdminResults() {
   const { data: results } = useGetAllResults();
+  const { data: subjects } = useGetSubjects();
+  const [search, setSearch] = useState("");
+  const [subjectFilter, setSubjectFilter] = useState("");
+
+  const filtered = useMemo(() => {
+    let list = results || [];
+    if (subjectFilter) list = list.filter(r => r.subjectId === subjectFilter);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      list = list.filter(r => r.subjectTitle?.toLowerCase().includes(q) || r.userId?.toLowerCase().includes(q));
+    }
+    return list;
+  }, [results, subjectFilter, search]);
+
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-wrap justify-between items-center mb-4 gap-3">
         <h2 className="text-xl font-bold">Platform Quiz Results</h2>
+        <select value={subjectFilter} onChange={e => setSubjectFilter(e.target.value)} className="h-10 rounded-xl border border-input bg-white px-3 py-2 text-sm">
+          <option value="">All Subjects</option>
+          {subjects?.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}
+        </select>
+      </div>
+      <div className="relative mb-4">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none"/>
+        <input type="text" value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Search by subject name…"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"/>
       </div>
       <div className="bg-white rounded-xl border overflow-hidden">
         <table className="w-full text-left">
@@ -558,7 +622,7 @@ function AdminResults() {
             </tr>
           </thead>
           <tbody className="divide-y">
-            {results?.map(r => (
+            {filtered.map(r => (
               <tr key={r.id} className="hover:bg-slate-50/50">
                 <td className="px-6 py-4 font-medium text-slate-900">{r.subjectTitle}</td>
                 <td className="px-6 py-4 text-slate-500 font-mono text-xs">{r.userId}</td>
@@ -570,7 +634,7 @@ function AdminResults() {
                 </td>
               </tr>
             ))}
-            {!results?.length && <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-500">No results found</td></tr>}
+            {!filtered.length && <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-500">{search || subjectFilter ? "No results match your filters" : "No results found"}</td></tr>}
           </tbody>
         </table>
       </div>

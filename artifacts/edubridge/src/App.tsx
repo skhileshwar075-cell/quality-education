@@ -12,6 +12,7 @@ import AdminLoginPage from "@/pages/admin-login";
 import RegisterPage from "@/pages/register";
 import DashboardPage from "@/pages/dashboard";
 import SubjectPage from "@/pages/subject";
+import TopicPage from "@/pages/topic";
 import QuizPage from "@/pages/quiz";
 import ProgressPage from "@/pages/progress";
 import AdminPage from "@/pages/admin";
@@ -47,6 +48,9 @@ function Router() {
       </Route>
       <Route path="/subject/:id">
         {() => <UserRoute><SubjectPage /></UserRoute>}
+      </Route>
+      <Route path="/topic/:id">
+        {() => <UserRoute><TopicPage /></UserRoute>}
       </Route>
       <Route path="/quiz/:subjectId">
         {() => <UserRoute><QuizPage /></UserRoute>}

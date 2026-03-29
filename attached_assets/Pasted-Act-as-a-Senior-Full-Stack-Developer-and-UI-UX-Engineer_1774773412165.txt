@@ -1,0 +1,185 @@
+Act as a Senior Full Stack Developer and UI/UX Engineer.
+
+Your task is to enhance the EduBridge platform by implementing advanced Search, Filter, and Category Card functionalities across relevant pages, while maintaining a clean and responsive UI.
+
+---
+
+⚠️ STRICT TECH STACK (DO NOT CHANGE):
+
+- React.js (JavaScript only, functional components + hooks)
+- Tailwind CSS ONLY
+- Node.js + Express.js
+- MongoDB (Mongoose)
+- JWT Authentication
+- No TypeScript
+- No external UI frameworks
+
+---
+
+🎯 OBJECTIVE:
+Enable users and admins to easily find, filter, and organize content such as quizzes, study materials, and users.
+
+---
+
+🔍 SEARCH FUNCTIONALITY
+
+📌 Where to Implement:
+
+- User Dashboard (quizzes, study material)
+- Admin Panel (users, quizzes, content)
+
+📌 Frontend:
+
+- Add search input field at top of lists
+- Debounce input (optional for performance)
+- Filter results dynamically as user types
+
+📌 Backend (if needed):
+
+- Support query params:
+  - /api/quizzes?search=math
+  - /api/users?search=john
+
+📌 Logic:
+
+- Match:
+  - Title
+  - Subject
+  - Keywords
+
+---
+
+🎯 FILTER FUNCTIONALITY
+
+📌 Filters to Add:
+
+For Quizzes:
+
+- Subject (Math, Science, etc.)
+- Difficulty (Easy, Medium, Hard)
+- Date (recent)
+
+For Users (Admin):
+
+- Role (user/admin)
+- Activity status
+
+---
+
+📌 Frontend:
+
+- Dropdown filters (select inputs)
+- Multi-filter support
+- Reset filters button
+
+---
+
+📌 Backend:
+
+- Accept query params:
+  - /api/quizzes?subject=Math&difficulty=Easy
+- Use Mongoose queries to filter data
+
+---
+
+🗂️ CATEGORY CARDS (IMPORTANT UI FEATURE)
+
+📌 Where to Use:
+
+- Homepage (Subjects)
+- Dashboard (Quiz categories)
+- Study Material section
+
+---
+
+📌 Design:
+
+Each category card should include:
+
+- Icon
+- Title (e.g., "Mathematics")
+- Short description
+- Number of quizzes/materials
+
+---
+
+📌 Interaction:
+
+- Click → navigate to filtered page
+  Example:
+  /quizzes?subject=Math
+
+---
+
+📌 UI (Tailwind):
+
+- Grid layout (2–4 columns)
+- Card style:
+  - rounded-xl
+  - shadow-md
+  - hover:scale-105
+  - transition
+
+---
+
+🔄 INTEGRATION FLOW
+
+1. User clicks category card
+2. Redirect to filtered results
+3. Search + filter refine results further
+
+---
+
+📱 RESPONSIVENESS
+
+- Mobile:
+  - Stack filters vertically
+  - Cards in single column
+- Desktop:
+  - Grid layout
+  - Filters inline
+
+---
+
+🔔 UX IMPROVEMENTS
+
+- Show:
+  - "No results found" message
+  - Loading state while fetching
+- Highlight active filters
+- Smooth transitions
+
+---
+
+🧩 REUSABLE COMPONENTS
+
+Create:
+
+- SearchBar.jsx
+- FilterDropdown.jsx
+- CategoryCard.jsx
+- ResultsList.jsx
+
+---
+
+📁 FILE STRUCTURE
+
+/client/src/components/
+
+- SearchBar.jsx
+- Filter.jsx
+- CategoryCard.jsx
+
+---
+
+🚫 DO NOT:
+
+- Add TypeScript
+- Use external UI libraries
+- Break existing API structure
+
+---
+
+✅ FINAL GOAL:
+
+A user-friendly platform where users can easily search, filter, and navigate through quizzes and study materials using clean UI and efficient backend queries.

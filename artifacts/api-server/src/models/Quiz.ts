@@ -5,6 +5,7 @@ export interface IQuestion {
   question: string;
   options: string[];
   correctAnswer: number;
+  topicId?: string;      // optional link to a Content/Topic _id
 }
 
 export interface IQuiz extends mongoose.Document {
@@ -18,6 +19,7 @@ const questionSchema = new mongoose.Schema<IQuestion>(
     question: { type: String, required: true },
     options: [{ type: String, required: true }],
     correctAnswer: { type: Number, required: true },
+    topicId: { type: String, default: "" },
   },
   { _id: false }
 );

@@ -29,7 +29,7 @@ artifacts/
       components/     # layout, ui components
       hooks/          # use-auth.tsx (AuthContext)
       lib/            # fetch-interceptor.ts (JWT injection)
-      pages/          # login, register, dashboard, subject, quiz, progress, admin
+      pages/          # login, register, dashboard, subject, topic (NEW), quiz, progress, admin
 
 lib/
   api-spec/           # OpenAPI spec (openapi.yaml)
@@ -49,11 +49,14 @@ lib/
 - `GET /api/subjects/:id` — Get single subject
 
 ### Content
-- `GET /api/content/:subjectId` — Get content for subject
+- `GET /api/content/:subjectId` — Get all topics for a subject
+- `GET /api/content/item/:id` — Get a single topic/content item by ID
 
 ### Quiz
-- `GET /api/quiz/:subjectId` — Get quiz for subject (protected)
-- `POST /api/quiz/submit` — Submit answers, get score (protected)
+- `GET /api/quiz/:subjectId` — Get full quiz for subject (protected)
+- `POST /api/quiz/submit` — Submit subject quiz, get score (protected)
+- `GET /api/quiz/topic/:topicId` — Get topic-specific quiz (falls back to subject quiz if no tagged questions)
+- `POST /api/quiz/topic/submit` — Submit topic quiz, get score (protected)
 
 ### Progress
 - `GET /api/progress/my` — Get completed lesson IDs (protected)

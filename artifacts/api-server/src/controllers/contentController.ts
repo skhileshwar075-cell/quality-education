@@ -11,6 +11,16 @@ function formatContent(c: any) {
   };
 }
 
+export async function getContentById(req: Request, res: Response) {
+  try {
+    const content = await Content.findById(req.params["id"]);
+    if (!content) { res.status(404).json({ message: "Topic not found" }); return; }
+    res.json(formatContent(content));
+  } catch {
+    res.status(500).json({ message: "Failed to fetch topic" });
+  }
+}
+
 export async function getContent(req: Request, res: Response) {
   try {
     const content = await Content.find({ subjectId: req.params["subjectId"] });
@@ -42,10 +52,7 @@ export async function updateContent(req: Request, res: Response) {
       { subjectId, title, notes, videoUrl: videoUrl || "" },
       { new: true, runValidators: true }
     );
-    if (!content) {
-      res.status(404).json({ message: "Content not found" });
-      return;
-    }
+    if (!content) { res.status(404).json({ message: "Content not found" }); return; }
     res.json(formatContent(content));
   } catch {
     res.status(500).json({ message: "Failed to update content" });
@@ -55,10 +62,7 @@ export async function updateContent(req: Request, res: Response) {
 export async function deleteContent(req: Request, res: Response) {
   try {
     const content = await Content.findByIdAndDelete(req.params["id"]);
-    if (!content) {
-      res.status(404).json({ message: "Content not found" });
-      return;
-    }
+    if (!content) { res.status(404).json({ message: "Content not found" }); return; }
     res.json({ message: "Content deleted" });
   } catch {
     res.status(500).json({ message: "Failed to delete content" });
