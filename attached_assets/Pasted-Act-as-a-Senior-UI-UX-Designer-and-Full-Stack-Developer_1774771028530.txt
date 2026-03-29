@@ -1,0 +1,224 @@
+Act as a Senior UI/UX Designer and Full Stack Developer.
+
+Your task is to redesign and enhance both the Admin Dashboard and User Dashboard of the EduBridge platform to make them modern, responsive, data-rich, and user-friendly, WITHOUT breaking existing functionality.
+
+---
+
+⚠️ STRICT TECH STACK (DO NOT CHANGE):
+
+- React.js (JavaScript only, functional components + hooks)
+- Tailwind CSS ONLY
+- Node.js + Express.js
+- MongoDB (Mongoose)
+- JWT Authentication
+- No TypeScript
+- No external UI frameworks
+
+---
+
+🎯 OBJECTIVE:
+Create visually appealing, well-structured dashboards with clear data representation, smooth UX, and role-based functionality.
+
+---
+
+🧭 COMMON LAYOUT (BOTH DASHBOARDS)
+
+App Shell:
+
+- Sidebar (collapsible):
+  - Icons + labels
+  - Active route highlight
+- Top Navbar:
+  - Page title
+  - User avatar + dropdown (Profile, Logout)
+- Main content area:
+  - Proper padding (p-6)
+  - Grid layout
+
+---
+
+👨‍🎓 USER DASHBOARD
+
+🎯 Features:
+
+1. 📊 Overview Cards
+
+- Total Quizzes Attempted
+- Average Score
+- Best Score
+- Progress %
+
+👉 Use card UI:
+
+- Icon
+- Title
+- Value
+- Colored indicator
+
+---
+
+2. 📈 Performance Section
+
+- Show recent quiz results
+- Display score trends (simple chart or list)
+
+---
+
+3. 📚 Available Quizzes
+
+- List or grid of quizzes:
+  - Subject
+  - Number of questions
+  - Start button
+
+---
+
+4. 📖 Study Material Section
+
+- Show generated study materials
+- Clean reading layout
+
+---
+
+5. 🕒 Recent Activity
+
+- Last attempts
+- Timestamp
+
+---
+
+🛠️ ADMIN DASHBOARD
+
+🎯 Features:
+
+1. 📊 Admin Overview Cards
+
+- Total Users
+- Total Quizzes
+- Total Attempts
+- Active Users
+
+---
+
+2. 📋 Quiz Management Panel
+
+- Table/List of quizzes:
+  - Edit button
+  - Delete button
+- Search & filter (by subject)
+
+---
+
+3. 📤 Bulk Upload Section
+
+- Upload CSV file
+- Preview table
+- Upload button
+
+---
+
+4. 🤖 AI Tools Section
+
+- Generate Quiz:
+  - Topic, difficulty, number of questions
+- Generate Study Material
+
+---
+
+5. 🔔 Notifications Panel (Optional)
+
+- Show system updates / alerts
+
+---
+
+🎨 UI/UX IMPROVEMENTS
+
+- Use modern card design:
+  - rounded-xl
+  - shadow-md
+- Consistent spacing (gap-6, p-6)
+- Hover effects:
+  - scale / shadow increase
+- Smooth transitions (duration-200)
+
+---
+
+📱 RESPONSIVENESS
+
+- Mobile:
+  - Sidebar collapses
+  - Cards stack vertically
+- Tablet/Desktop:
+  - Grid layout (2–4 columns)
+
+---
+
+🔁 STATE MANAGEMENT
+
+- Use React hooks:
+  - useState
+  - useEffect
+- Fetch data from backend APIs using axios
+
+---
+
+🔐 ROLE-BASED ACCESS
+
+- User routes:
+  
+  - /dashboard
+
+- Admin routes:
+  
+  - /admin/dashboard
+
+- Protect routes using JWT:
+  
+  - Only admin can access admin dashboard
+
+---
+
+🧩 REUSABLE COMPONENTS
+
+Create:
+
+- DashboardCard
+- Table
+- Modal
+- Sidebar
+- Navbar
+- Loader
+
+---
+
+🔔 FEEDBACK SYSTEM
+
+- Add:
+  - Toast messages (success/error)
+  - Loading states
+  - Empty state UI
+
+---
+
+📁 OUTPUT REQUIREMENTS
+
+- Improve existing dashboard pages (do not rebuild from scratch unnecessarily)
+- Maintain clean code structure:
+  - components/
+  - pages/
+- Keep UI consistent across admin and user panels
+
+---
+
+🚫 DO NOT:
+
+- Add TypeScript
+- Use external UI frameworks
+- Break backend or API structure
+- Add unnecessary libraries
+
+---
+
+✅ FINAL GOAL:
+
+A professional, feature-rich dashboard system with excellent UI/UX that clearly differentiates admin and user roles and impresses during project demo.

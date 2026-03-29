@@ -7,8 +7,67 @@ import { Dialog } from "@/components/ui/dialog";
 import { useGetSubjects, useCreateSubject, useDeleteSubject, useGetUsers, useGetAllResults, useCreateContent } from "@workspace/api-client-react";
 import { useAdminContent, useAdminQuizzes, updateContent, deleteContent, deleteQuiz } from "@/hooks/use-admin-api";
 import { Link } from "wouter";
-import { Plus, Trash2, Settings, Users, BookOpen, FileText, BarChart2, Upload, Cpu, Edit2, X, CheckCircle } from "lucide-react";
+import { Plus, Trash2, Settings, Users, BookOpen, FileText, BarChart2, Upload, Cpu, Edit2, X, CheckCircle, Target, TrendingUp, Brain } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+
+/* ─── Admin Stat Card ─────────────────────────────────────────────────────────── */
+function AdminStatCard({ icon, label, value, gradient, loading }: {
+  icon: React.ReactNode; label: string; value: number | string; gradient: string; loading?: boolean;
+}) {
+  return (
+    <div className={`relative overflow-hidden rounded-2xl p-6 text-white ${gradient} shadow-lg flex-1 min-w-[140px]`}>
+      <div className="absolute top-0 right-0 p-5 opacity-20">{icon}</div>
+      {loading ? (
+        <div className="space-y-2">
+          <div className="h-3 w-20 bg-white/30 rounded animate-pulse"/>
+          <div className="h-8 w-12 bg-white/30 rounded animate-pulse"/>
+        </div>
+      ) : (
+        <>
+          <p className="text-sm font-medium text-white/70 mb-1">{label}</p>
+          <p className="text-3xl font-bold">{value}</p>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ─── Admin Stats Row ─────────────────────────────────────────────────────────── */
+function AdminStatsRow() {
+  const { data: users, isLoading: usersLoading } = useGetUsers();
+  const { data: subjects, isLoading: subjectsLoading } = useGetSubjects();
+  const { data: results, isLoading: resultsLoading } = useGetAllResults();
+  const { data: content, isLoading: contentLoading } = useAdminContent();
+
+  return (
+    <div className="flex flex-wrap gap-4 mb-8">
+      <AdminStatCard
+        icon={<Users className="h-10 w-10"/>} label="Total Users"
+        value={usersLoading ? "…" : users?.length ?? 0}
+        gradient="bg-gradient-to-br from-indigo-500 to-indigo-700"
+        loading={usersLoading}
+      />
+      <AdminStatCard
+        icon={<BookOpen className="h-10 w-10"/>} label="Subjects"
+        value={subjectsLoading ? "…" : subjects?.length ?? 0}
+        gradient="bg-gradient-to-br from-violet-500 to-violet-700"
+        loading={subjectsLoading}
+      />
+      <AdminStatCard
+        icon={<FileText className="h-10 w-10"/>} label="Content Items"
+        value={contentLoading ? "…" : content?.length ?? 0}
+        gradient="bg-gradient-to-br from-emerald-500 to-teal-600"
+        loading={contentLoading}
+      />
+      <AdminStatCard
+        icon={<Target className="h-10 w-10"/>} label="Quiz Attempts"
+        value={resultsLoading ? "…" : results?.length ?? 0}
+        gradient="bg-gradient-to-br from-amber-400 to-orange-500"
+        loading={resultsLoading}
+      />
+    </div>
+  );
+}
 
 export default function AdminPage() {
   return (
@@ -33,6 +92,8 @@ export default function AdminPage() {
           </Link>
         </div>
       </div>
+
+      <AdminStatsRow />
 
       <Tabs defaultValue="subjects">
         <TabsList className="mb-8 flex flex-wrap h-auto gap-1">
