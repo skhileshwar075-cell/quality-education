@@ -1,4 +1,4 @@
-import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
+import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,6 +16,7 @@ import QuizPage from "@/pages/quiz";
 import ProgressPage from "@/pages/progress";
 import AdminPage from "@/pages/admin";
 import AnalyticsPage from "@/pages/analytics";
+import HomePage from "@/pages/home";
 import QuizUploadPage from "@/pages/quiz-upload";
 import GenerateQuizPage from "@/pages/generate-quiz";
 import NotFound from "@/pages/not-found";
@@ -37,10 +38,8 @@ function Router() {
       <Route path="/admin/login" component={AdminLoginPage} />
       <Route path="/register" component={RegisterPage} />
 
-      {/* Root redirects to user login */}
-      <Route path="/">
-        <Redirect to="/login" />
-      </Route>
+      {/* Root shows landing page */}
+      <Route path="/" component={HomePage} />
 
       {/* User-protected routes */}
       <Route path="/dashboard">

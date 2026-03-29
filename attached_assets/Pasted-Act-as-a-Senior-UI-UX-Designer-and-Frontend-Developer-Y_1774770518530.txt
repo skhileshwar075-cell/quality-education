@@ -1,0 +1,177 @@
+Act as a Senior UI/UX Designer and Frontend Developer.
+
+Your task is to design and implement a modern, responsive, and visually appealing Home Page (Landing Page) for the EduBridge platform.
+
+---
+
+⚠️ STRICT TECH STACK (DO NOT CHANGE):
+
+- React.js (JavaScript only, functional components + hooks)
+- Tailwind CSS ONLY
+- No TypeScript
+- No external UI frameworks
+
+---
+
+🎯 OBJECTIVE:
+Create a professional landing page that clearly presents EduBridge as a smart learning platform and encourages users to sign up or log in.
+
+---
+
+🏠 HOME PAGE STRUCTURE
+
+1. 🔝 Navbar
+
+- Logo: "EduBridge"
+- Links:
+  - Home
+  - Features
+  - About
+  - Contact
+- Buttons:
+  - Login
+  - Register
+- Sticky navbar with shadow on scroll
+
+---
+
+2. 🎯 Hero Section (Top Section)
+
+- Large headline:
+  👉 "Learn Smarter with EduBridge"
+
+- Subheading:
+  👉 "AI-powered quizzes, smart analytics, and modern learning tools"
+
+- CTA Buttons:
+  
+  - "Get Started"
+  - "Explore Features"
+
+- Add:
+  
+  - Gradient background
+  - Illustration or image (optional)
+  - Centered or split layout
+
+---
+
+3. 🚀 Features Section
+
+Display 4–6 feature cards:
+
+- AI Quiz Generation 🤖
+- Bulk Upload Quizzes 📤
+- Performance Analytics 📊
+- Secure Authentication 🔐
+- Study Material Generator 📚
+- Real-time Notifications 🔔
+
+Each card should include:
+
+- Icon
+- Title
+- Short description
+- Hover effect
+
+---
+
+4. 📊 How It Works Section
+
+3-step process:
+
+1. Register/Login
+2. Attempt quizzes / generate content
+3. Track performance
+
+Use:
+
+- Icons
+- Horizontal layout (or vertical on mobile)
+
+---
+
+5. 🎓 About Section
+
+- Short description of EduBridge:
+  - Purpose
+  - Benefits
+- Clean text + image layout
+
+---
+
+6. ⭐ Call-To-Action Section
+
+- Highlight:
+  👉 "Start Your Learning Journey Today"
+
+- Button:
+  👉 "Join Now"
+
+- Use strong background color for contrast
+
+---
+
+7. 📞 Footer
+
+- Links:
+  - About
+  - Contact
+  - Privacy Policy
+- Social icons (optional)
+- Copyright text
+
+---
+
+🎨 UI/UX REQUIREMENTS
+
+- Use modern design:
+  - Tailwind spacing (p-6, gap-6)
+  - Rounded corners (rounded-xl)
+  - Shadows (shadow-md)
+- Smooth hover effects
+- Consistent color palette
+- Clean typography hierarchy
+
+---
+
+📱 RESPONSIVENESS
+
+- Mobile-first design
+- Stack sections vertically on small screens
+- Navbar collapses into menu icon
+
+---
+
+🧩 COMPONENT STRUCTURE
+
+Create reusable components:
+
+- Navbar
+- HeroSection
+- FeatureCard
+- Footer
+- CTASection
+
+---
+
+🔗 ROUTING
+
+- Clicking "Login" → "/login"
+- Clicking "Register" → "/register"
+- CTA → redirect accordingly
+
+---
+
+🚫 DO NOT:
+
+- Add TypeScript
+- Use external UI frameworks
+- Add unnecessary libraries
+- Break existing routing
+
+---
+
+✅ FINAL GOAL:
+
+A visually impressive, responsive, and professional landing page that enhances user engagement and makes EduBridge look like a production-ready platform.
